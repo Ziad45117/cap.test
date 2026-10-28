@@ -3,7 +3,26 @@ import os
 from datetime import datetime
 
 import streamlit as st
+import requests
+import streamlit as st
 
+if "name" not in st.session_state:
+    st.session_state.name = ""
+
+if not st.session_state.name:
+    name = st.text_input("اكتب اسمك عشان نبدأ:")
+    if st.button("ابدأ") and name.strip():
+        st.session_state.name = name.strip()
+        st.rerun()
+    st.stop()
+
+SCRIPT_URL = "/d/1CRk28pE3n8uZDKxbeGl6uAkFLGmKFY8f1d78PbcyukI/edit"
+
+def save_answer(name, answer):
+    try:
+        requests.post(SCRIPT_URL, json={"name": name, "answer": answer}, timeout=10)
+    except requests.RequestException as e:
+        print("مشكلة في الحفظ على الشيت:", e)
 st.set_page_config(page_title="cap.interview", page_icon="🌟")
 
 st.markdown("""
